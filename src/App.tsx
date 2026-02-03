@@ -1,32 +1,30 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "@/theme/ThemeProvider";
-import Index from "./pages/Index";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AppShell from './components/layout/AppShell';
+import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 
-const queryClient = new QueryClient();
+// Placeholder components for routes not yet implemented
+const Progress = () => <div className="p-8 text-center text-slate-500 font-medium">Progress Tracking Coming Soon!</div>;
+const Achievements = () => <div className="p-8 text-center text-slate-500 font-medium">Achievements Coming Soon!</div>;
 
-/**
- * Default App structure for single-page applications.
- * 
- * For multi-page apps with routing:
- * 1. Import BrowserRouter, Routes, Route from 'react-router-dom'
- * 2. Wrap content in <BrowserRouter><Routes>...</Routes></BrowserRouter>
- * 3. Add routes: <Route path="/about" element={<About />} />
- * 
- * See docs/ROUTING.md for detailed instructions.
- */
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <ThemeProvider>
-        <Index />
-      </ThemeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Landing />} />
+
+      {/* Protected App Routes */}
+      <Route path="/app" element={<AppShell />}>
+        <Route index element={<Dashboard />} />
+        <Route path="progress" element={<Progress />} />
+        <Route path="achievements" element={<Achievements />} />
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 export default App;
